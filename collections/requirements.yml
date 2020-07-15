@@ -1,4 +1,0 @@
-collections:
-  - name: https://github.com/zedr/tower_migration
-    type: git
-    version: master
