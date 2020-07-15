@@ -1,0 +1,40 @@
+- hosts: all
+  gather_facts: false
+  vars:
+    resource:
+      type: "workflow_job_template"
+      source:
+        name: "Demo Workflow Template"
+        organization: "3"
+      target:
+        organization: "2"
+    api:
+      host_url: "https://tower.local"
+      validate_certs: no
+      token:
+    git:
+      repo_uri: "git@github.com:zedr/tower-state-repo.git"
+  tasks:
+    - name: Download resource
+      include_role:
+        name: zedr.tower_migration.download
+      vars:
+        host_url: "{{ api.host_url }}"
+        resource_type: "{{ resource.type }}"
+        source: "{{ resource.source }}"
+        url_validate_certs: "{{ api.validate_certs }}"
+        token: "{{ api.token }}"
+        git_repo_uri: "{{ git.repo_uri }}"
+
+    - name: Upload resource
+      include_role:
+        name: zedr.tower_migration.upload
+      vars:
+        host_url: "{{ api.host_url }}"
+        resource_type: "{{ resource.type }}"
+        source: "{{ resource.source }}"
+        target: "{{ resource.target }}"
+        url_validate_certs: "{{ api.validate_certs }}"
+        token: "{{ api.token }}"
+        git_repo_uri: "{{ git.repo_uri }}"
+
